@@ -1,0 +1,16 @@
+# File di sistema macOS
+.DS_Store
+
+# File di build Gradle
+.gradle/
+build/
+bin/
+
+# File dello script che abbiamo usato
+scriptGit.sh
+
+# Altri file di progetto (IDE, etc.)
+.idea/
+*.iml
+*.iws
+*.class
