@@ -9,12 +9,9 @@ import it.unibo.collections.social.api.User;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * This will be an implementation of
@@ -38,6 +35,7 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      *
      * think of what type of keys and values would best suit the requirements
      */
+    private final HashMap<String, HashMap<String, U>> followedUsers;
 
     /*
      * [CONSTRUCTORS]
@@ -50,6 +48,11 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      * - username
      * - age and every other necessary field
      */
+
+    public SocialNetworkUserImpl(final String firstname, final String lastName, final String username, final int userAge){
+        super(firstname, lastName, username, userAge);
+        this.followedUsers = new HashMap<>();
+    }
     /**
      * Builds a user participating in a social network.
      *
@@ -63,13 +66,18 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      *            alias of the user, i.e. the way a user is identified on an
      *            application
      */
-    public SocialNetworkUserImpl(final String name, final String surname, final String user, final int userAge) {
-        super(null, null, null, 0);
+    public SocialNetworkUserImpl(final UserImpl user){
+        super(user.getFirstName(), user.getLastName(), user.getUsername(), user.getAge());
+        this.followedUsers = new HashMap<>();
     }
 
     /*
      * 2) Define a further constructor where the age defaults to -1
      */
+    public SocialNetworkUserImpl(final String firstname, final String lastName, final String username){
+        super(firstname, lastName, username, -1);
+        this.followedUsers = new HashMap<>();
+    }
 
     /*
      * [METHODS]
@@ -78,7 +86,20 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      */
     @Override
     public boolean addFollowedUser(final String circle, final U user) {
-        return false;
+        HashMap<String, U> couple = new HashMap<>();
+        if (this.followedUsers.containsKey(circle)){
+            couple = this.followedUsers.get(circle);
+        }
+
+        couple.put(user.getUsername(), user);
+        for (final U followers:this.getFollowedUsers()){
+            if(user.equals(followers)){
+                return false;
+            }
+        }
+
+        this.followedUsers.put(circle, couple);
+        return true;
     }
 
     /**
@@ -88,11 +109,23 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      */
     @Override
     public Collection<U> getFollowedUsersInGroup(final String groupName) {
-        return null;
+        if (this.followedUsers.containsKey(groupName)){
+            final Map<String, U> innerMap = followedUsers.get(groupName);
+            final Collection<U> followed = new ArrayList<>(innerMap.values());
+            return followed;
+        }
+        final Collection<U> empty= new ArrayList<>();
+        return empty;
     }
 
     @Override
     public List<U> getFollowedUsers() {
-        return null;
-    }
+        final List<U> users = new ArrayList<>();
+        if(!this.followedUsers.isEmpty()){
+                for (final Map<String, U> group : this.followedUsers.values()) {
+                users.addAll((group.values()));
+            }
+        }
+        return users;
+        }
 }

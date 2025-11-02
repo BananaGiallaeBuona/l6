@@ -11,6 +11,15 @@ Prima di eseguire ogni operazione sul worktree o sul repository,
 si verifichi lo stato del repository con `git status`.
 
 1. Si cloni localmente il repository
+   
+   nikitapiraino@MacBook-Air-di-Nikita l6 % git clone git@github.com:unibo-oop/lab06.git
+Cloning into 'lab06'...
+The authenticity of host 'github.com (140.82.121.4)' can't be established.
+ED25519 key fingerprint is SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? y           
+Please type 'yes', 'no' or the fingerprint: yes
+
 2. Ci si assicuri di avere localmente entrambi i branch remoti
 3. Si faccia il merge di `feature` dentro `master`, ossia: si posizioni la `HEAD` su `master`
    e da qui si esegua il merge di `feature`
